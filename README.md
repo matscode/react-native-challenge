@@ -1,4 +1,4 @@
-# 🧪 Senior React Native Coding Challenge
+# 🧪 React Native Coding Challenge
 
 ## Crypto Chart Viewer + Price Alerts
 
