@@ -16,7 +16,7 @@ Build a **Crypto Chart Viewer app** using **React Native with Expo** that:
 
 ## 📝 Implementation Checklist
 
-- [x] **Project Setup**: Clean up, install packages (Zustand, Wagmi Charts, NativeWind), configure NativeWind
+- [x] **Project Setup**: Clean up, install packages (Zustand, Wagmi Charts, NativeWind, TanStack Query, Phosphor), configure NativeWind
 - [ ] **Navigation**: Setup Drawer Navigation with 10 cryptos
 - [ ] **Data Fetching**: Fetch crypto data (CoinGecko)
 - [ ] **Detail Screen**:
