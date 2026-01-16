@@ -139,3 +139,6 @@ The architecture separates concerns:
   - **Dark Mode** support.
   - Improved navigation with back buttons and smoother transitions.
   - **Onboarding Flow**: A journey map or tutorial to introduce features to new users.
+- **Testing**:
+  - **Robust Strategy**: Implement a consistent `testID` naming convention (e.g., `ScreenName.ComponentName.Element`) to avoid conflicts and improve test maintainability.
+  - **E2E Tests**: Add Maestro or Detox for end-to-end user flow validation.
