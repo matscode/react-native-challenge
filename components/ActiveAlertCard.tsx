@@ -25,6 +25,11 @@ export function ActiveAlertCard({ alert, onRemove }: ActiveAlertCardProps) {
           <Text className="text-lg font-bold text-gray-900">
             ${alert.targetPrice.toLocaleString()}
           </Text>
+          {alert.initialPrice !== undefined && (
+             <Text className="text-xs text-gray-500">
+                Entry: ${alert.initialPrice.toLocaleString()}
+             </Text>
+          )}
         </View>
       </View>
       

@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LineChart } from "react-native-wagmi-charts";
 import { AlertControl } from "./AlertControl";
 
@@ -13,7 +12,6 @@ interface CoinLineChartProps {
 }
 
 export function CoinLineChart({ coinId, height, width, onPriceChange }: CoinLineChartProps) {
-  const insets = useSafeAreaInsets();
   const { data: chartData, isLoading, error } = useQuery({
     queryKey: ["chart", coinId, "line"],
     queryFn: async () => {
@@ -40,7 +38,11 @@ export function CoinLineChart({ coinId, height, width, onPriceChange }: CoinLine
   }, [chartData, onPriceChange]);
 
   if (isLoading) {
-    return <ActivityIndicator size="large" color="#2563EB" />;
+    return (
+      <View style={{ height, width }} className="items-center justify-center">
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
   }
 
   if (error) {
@@ -63,8 +65,7 @@ export function CoinLineChart({ coinId, height, width, onPriceChange }: CoinLine
         </LineChart>
         
         <View 
-          className="absolute"
-          style={{ bottom: 16 + insets.bottom, right: 16 + insets.right }}
+          className="absolute bottom-4 right-8"
         >
           <AlertControl coinId={coinId} currentPrice={currentPrice} />
         </View>

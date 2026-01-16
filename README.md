@@ -1,18 +1,28 @@
-# 🧪 React Native Coding Challenge
+# Crypto Chart Viewer + Price Alerts
 
-## Crypto Chart Viewer + Price Alerts
+> **Note**: For the original coding challenge instructions and requirements, please see [PROJECT_INSTRUCTIONS.md](./PROJECT_INSTRUCTIONS.md).
 
-### 🔍 Overview
+## Overview
 
-Build a **Crypto Chart Viewer app** using **React Native with Expo** that:
+### Approach
 
-- Displays interactive price charts for **10 cryptocurrencies**
-- Allows users to navigate via a **drawer**
-- Enables users to set **price alerts** per crypto
-- Shows a notification indicator when an alert is triggered
-- Lets users review and clear triggered alerts
+This app uses a React Native + Expo stack with:
 
----
+- **Expo Router** for navigation (Drawer + Stack).
+- **Zustand** for global state management (Coins, Alerts, Chart settings).
+- **TanStack Query** for efficient data fetching and caching (CoinGecko API).
+- **NativeWind** for utility-first styling.
+- **react-native-wagmi-charts** for interactive, high-performance charts.
+- **expo-notifications** for local price alerts.
+- **react-native-keyboard-controller** for robust keyboard handling in modals.
+- **yup** for form validation.
+
+The architecture separates concerns:
+
+- `store/`: State logic.
+- `components/`: UI components and Logic-only components (like `AlertManager`).
+- `app/`: Routing and screen layout.
+- `hooks/`: Custom hooks (e.g., notification setup).
 
 ## 📝 Implementation Checklist
 
@@ -26,92 +36,87 @@ Build a **Crypto Chart Viewer app** using **React Native with Expo** that:
   - [x] Set/Update Price Alerts
   - [x] Trigger Logic
   - [x] Notification Icon & Badge
-  - [x] Alerts History Screen
+  - [x] Alerts History Screen (shows Entry Price)
 - [x] **Styling**: Polish UI with NativeWind
+- [x] **Bonus Features**:
+  - [x] Animations on the chart render
+  - [x] Persist alert state across app restarts
+  - [x] Send **push notifications** when a price alert is triggered
+  - [x] Implement **deep linking** so that tapping a push notification opens the **Alerts screen** directly
 
----
+## How to Run
 
-## 🎯 Objectives
+1. Install dependencies:
 
-### 🧭 Navigation
+   ```bash
+   npm install
+   ```
 
-- Implement **drawer navigation**
-- The drawer should be a list of **10 cryptocurrencies** by market cap
-- Selecting a currency opens a **detail screen** for that cryptocurrency
+2. **Configure Environment** (Optional):
 
----
+   - **`EXPO_PUBLIC_ENABLE_FUTURE_CROSSING_ALERTS`** (Default: `true`)
+     - Controls alert logic. If `true`, alerts only trigger when price *crosses* the target. If `false` (for testing), triggers immediately if condition met.
+   - **`EXPO_PUBLIC_ENABLE_PRICE_MONITOR_POLLING`** (Default: `true`)
+     - Set to `true` to enable background polling for price alerts (every 30s) while app is open.
+   - **`EXPO_PUBLIC_ENABLE_CHART_POLLING`** (Default: `true`)
+     - Set to `true` to enable live chart updates (every 30s).
 
-### 📈 Crypto Detail Screen
+3. Start the development server:
 
-- Show a **price chart** (e.g., last 24h or 7d)
-- Display the **current price**
-- Allow users to **set a price alert** (e.g., "Notify me if the price goes above $70,000")
-- If an alert is already active, display it with an option to cancel or update
+   ```bash
+   npx expo start
+   ```
 
----
+4. Run on Android/iOS simulator or device.
 
-### 🚨 Alerts System
+## Trade-offs & Limitations
 
-- Display a **notification icon** in the top-right of the app
-  - Show a badge or indicator when **any alert is triggered**
-- Tapping the icon opens an **Alerts screen**
-  - List all **triggered alerts** with timestamps UTC
-- When alerts are displayed in the log, they are **cleared** and not shown again
+### 1. No Alert Editing
 
----
+- **Create/Delete Only**: Users cannot edit an existing alert. They must delete it and create a new one.
+  - *Rationale*: Simplifies the UI and state management for this assessment.
 
-## 🧩 Technical Requirements
+### 2. Foreground Monitoring
 
-- Use **React Native with Expo**
-- Style the app using **NativeWind**
-  - How you style is up to you
-- Implement real-time or frequently updated price tracking
-- State management (Your choice of framework)
-- Use **TypeScript** and clean, modular code
-- The app should work smoothly on both **iOS and Android**
+- **Polling Mechanism**: Price monitoring runs via `AlertManager` inside the React Native app context.
+  - *Limitation*: Alerts only trigger while the app is running (foreground or background while active). If the app is killed, price monitoring stops.
+  - *Solution for Production*: A backend service (server-side) should monitor prices and send remote push notifications (FCM/APNs) to wake the device.
 
----
+### 3. API Limits
 
-## ✅ What We’re Looking For
+- **CoinGecko Free Tier**: The app polls every 30 seconds to respect rate limits. Real-time updates via WebSockets were skipped to avoid complexity and rate limit issues.
 
-- Scalable app structure and clean state architecture
-- Good UX around charts, alert creation, and notifications
-- Clear handling of edge cases (e.g., API failures, invalid inputs, rapid price changes)
-- Maintainable TypeScript usage and reusable components
+### 4. Alert Modal Design
 
----
-
-## 💡 Bonus (Optional)
-
-- Animations on the chart render
-- Persist alert state across app restarts
-- Send **push notifications** when a price alert is triggered
-- Implement **deep linking** so that tapping a push notification opens the **Alerts screen** directly
-
----
-
-## 📝 Submission Instructions
-
-- Include an `OVERVIEW.md` with:
-  - A short overview of your approach
-  - Instructions for running the app
-  - Any limitations, trade-offs, or assumptions made
-- Fork this REPO and push your code
-- Create an apk build and share a link to download it in the README.
-
----
+- **Top Position**: The alert modal is positioned at the top of the screen rather than a bottom sheet.
+  - *Rationale*: Improves usability with the keyboard, preventing the input from being covered.
+- **Height Constraint**: The modal has a maximum height of 80% of the screen.
+  - *Trade-off*: While this prevents the modal from expanding off-screen with many alerts, it requires scrolling for long lists.
 
 ## ⚖️ Tradeoffs & Performance Opportunities
 
 ### Tradeoffs
-*   **Polling vs. WebSockets**: We use polling (every 30s) for simplicity and API cost management (CoinGecko free tier).
-    *   *Pro*: Easy to implement, predictable API usage.
-    *   *Con*: Data is not truly real-time (up to 30s latency). WebSockets would be better for a "pro" trading experience but require a paid plan or a different provider.
-*   **No Caching**: We disabled `tanstack-query` caching (`gcTime: 0`) for charts.
-    *   *Pro*: Always shows the latest data.
-    *   *Con*: Higher bandwidth usage and potential "flicker" or loading state on every navigation or rotation.
+
+- **Polling vs. WebSockets**: We use polling (every 30s) for simplicity and API cost management (CoinGecko free tier).
+  - *Pro*: Easy to implement, predictable API usage.
+  - *Con*: Data is not truly real-time (up to 30s latency). WebSockets would be better for a "pro" trading experience but require a paid plan or a different provider.
+
+- **No Caching**: We disabled `tanstack-query` caching for charts.
+  - *Pro*: Always shows the latest data.
+  - *Con*: Higher bandwidth usage and potential "flicker" or loading state on every navigation or rotation.
 
 ### Performance Opportunities
-*   **Optimized Polling**: Instead of two separate polls (one for alert checks, one for chart data), we could consolidate them into a single global store action that fetches price data once and distributes it. currently, we might be double-fetching for the same coin if the user is viewing its chart.
-*   **Background Fetch**: For alerts, we rely on the app being open. Using `expo-background-fetch` or native modules would allow price monitoring even when the app is backgrounded or killed (crucial for a real production app).
-*   **Render Optimization**: The `AlertModal` re-renders entirely when typing the price. Separating the form state into a smaller sub-component would reduce render work.
+
+- **Optimized Polling**: Instead of two separate polls (one for alert checks, one for chart data), we could consolidate them into a single global store action that fetches price data once and distributes it. currently, we might be double-fetching for the same coin if the user is viewing its chart.
+
+- **Render Optimization**: The `AlertModal` re-renders entirely when typing the price. Separating the form state into a smaller sub-component would reduce render work.
+
+## 🚀 Improvement Opportunities
+
+- **Chart Features**:
+  - Add timeline toggle (1d, 7d, 1m, 1y).
+  - Add interactivity: Pan, Zoom, Grid lines.
+- **UI/UX**:
+  - **Dark Mode** support.
+  - Improved navigation with back buttons and smoother transitions.
+  - **Onboarding Flow**: A journey map or tutorial to introduce features to new users.

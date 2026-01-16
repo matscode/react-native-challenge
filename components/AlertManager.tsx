@@ -1,6 +1,6 @@
 import { useAlertStore } from "@/store/useAlertStore";
+import * as Notifications from "expo-notifications";
 import { useEffect } from "react";
-import { Alert as NativeAlert, Vibration } from "react-native";
 
 export function AlertManager() {
   const { alerts, triggerAlert } = useAlertStore();
@@ -18,24 +18,48 @@ export function AlertManager() {
         );
         const data = await response.json();
 
-        activeAlerts.forEach((alert) => {
+        activeAlerts.forEach(async (alert) => {
           const price = data[alert.coinId]?.usd;
           if (!price) return;
 
           let shouldTrigger = false;
-          if (alert.type === 'above' && price > alert.targetPrice) {
-            shouldTrigger = true;
-          } else if (alert.type === 'below' && price < alert.targetPrice) {
-            shouldTrigger = true;
+          const useFutureCrossing = process.env.EXPO_PUBLIC_ENABLE_FUTURE_CROSSING_ALERTS === 'true';
+
+          if (useFutureCrossing && alert.initialPrice !== undefined) {
+            // Future crossing logic
+            if (alert.type === 'above') {
+              if (alert.initialPrice < alert.targetPrice && price > alert.targetPrice) {
+                shouldTrigger = true;
+              }
+            } else if (alert.type === 'below') {
+              if (alert.initialPrice > alert.targetPrice && price < alert.targetPrice) {
+                shouldTrigger = true;
+              }
+            }
+          } else {
+            // Standard logic
+            if (alert.type === 'above' && price > alert.targetPrice) {
+              shouldTrigger = true;
+            } else if (alert.type === 'below' && price < alert.targetPrice) {
+              shouldTrigger = true;
+            }
           }
 
           if (shouldTrigger) {
+            const { status } = await Notifications.getPermissionsAsync();
+            
+            if (status === 'granted') {
+              await Notifications.scheduleNotificationAsync({
+                content: {
+                  title: "Price Alert! 🚨",
+                  body: `${alert.coinId.toUpperCase()} is now ${alert.type} $${alert.targetPrice}`,
+                  sound: true,
+                },
+                trigger: null,
+              });
+            }
+
             triggerAlert(alert.id);
-            Vibration.vibrate();
-            NativeAlert.alert(
-              "Price Alert! 🚨",
-              `${alert.coinId.toUpperCase()} is now ${alert.type} $${alert.targetPrice}`
-            );
           }
         });
       } catch (error) {
@@ -51,7 +75,7 @@ export function AlertManager() {
       const interval = setInterval(checkAlerts, 30000);
       return () => clearInterval(interval);
     }
-  }, [alerts]); // Re-run if alerts change (to pick up new ones)
+  }, [alerts, triggerAlert]);
 
   return null; // Logic only component
 }

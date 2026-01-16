@@ -8,14 +8,18 @@ import { DrawerSectionTitle } from "./DrawerSectionTitle";
 export function CustomDrawerContent(props: any) {
   const router = useRouter();
   const pathname = usePathname();
-  const { top } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
   const { coins } = useCoinStore();
-
-  const isAlertsActive = pathname.includes("alerts");
 
   return (
     <View style={{ flex: 1 }}>
-      <DrawerContentScrollView {...props} contentContainerStyle={{ paddingTop: top }}>
+      <DrawerContentScrollView 
+        {...props} 
+        contentContainerStyle={{ 
+          paddingTop: top, 
+          paddingBottom: bottom + 20 
+        }}
+      >
         <View className="px-6 py-6">
           <Text className="text-2xl font-bold">Coinscout</Text>
         </View>
@@ -29,7 +33,10 @@ export function CustomDrawerContent(props: any) {
               return (
                 <Pressable
                   key={coin.id}
-                  onPress={() => router.push(`/(drawer)/(inner)/${coin.id}`)}
+                  onPress={() => {
+                    router.push(`/(drawer)/(inner)/${coin.id}`);
+                    props.navigation.closeDrawer();
+                  }}
                   className={`rounded-full px-4 py-2 mb-2 ${
                     isActive ? "bg-blue-600" : "bg-gray-100 hover:bg-gray-200"
                   }`}
@@ -47,7 +54,10 @@ export function CustomDrawerContent(props: any) {
           <DrawerSectionTitle title="Alerts" />
           <View className="px-4">
             <Pressable
-              onPress={() => router.push("/(drawer)/(inner)/notifications")}
+              onPress={() => {
+                router.push("/(drawer)/(inner)/notifications");
+                props.navigation.closeDrawer();
+              }}
               className={`flex-row items-center py-2 rounded-full px-4 ${
                 pathname.includes("notifications") ? "bg-blue-100" : "transparent"
               }`}
@@ -58,7 +68,10 @@ export function CustomDrawerContent(props: any) {
             </Pressable>
             
             <Pressable
-              onPress={() => router.push("/(drawer)/(inner)/alerts")}
+              onPress={() => {
+                router.push("/(drawer)/(inner)/alerts");
+                props.navigation.closeDrawer();
+              }}
               className={`flex-row items-center py-2 rounded-full px-4  ${
                 pathname.includes("alerts") ? "bg-blue-100" : "transparent"
               }`}

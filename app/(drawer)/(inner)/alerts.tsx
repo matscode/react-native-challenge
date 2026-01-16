@@ -1,16 +1,16 @@
 import { useAlertStore } from "@/store/useAlertStore";
 import { Trash } from "phosphor-react-native";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function AlertsScreen() {
-  const { top, bottom } = useSafeAreaInsets();
   const { alerts, removeAlert } = useAlertStore();
 
-  const activeAlerts = alerts.filter(a => a.status === 'active');
+  const activeAlerts = alerts
+    .filter(a => a.status === 'active')
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   return (
-    <View className="flex-1 bg-white" style={{ paddingTop: top + 60, paddingBottom: bottom }}>
+    <View className="flex-1 bg-white">
       <ScrollView className="flex-1 px-6">
         <Text className="text-3xl font-bold text-gray-900 mb-6">Manage Alerts</Text>
 

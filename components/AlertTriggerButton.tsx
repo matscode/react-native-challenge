@@ -10,10 +10,10 @@ export function AlertTriggerButton({ onPress }: AlertTriggerButtonProps) {
     <View className="bg-gray-100/80 rounded-lg p-1">
       <Pressable 
         onPress={onPress}
-        className="bg-white shadow-sm px-2 py-1.5 rounded-md items-center justify-center flex-row gap-1.5"
+        className="bg-white px-2 py-1.5 rounded-md items-center justify-center flex-row gap-1.5"
       >
         <BellRinging size={16} color="#374151" />
-        <Text className="text-xs font-medium text-gray-700">Alert</Text>
+        <Text className="font-medium text-gray-700">Set alert</Text>
       </Pressable>
     </View>
   );

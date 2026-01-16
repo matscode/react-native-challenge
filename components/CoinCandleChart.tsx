@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CandlestickChart } from "react-native-wagmi-charts";
 import { AlertControl } from "./AlertControl";
 
@@ -13,7 +12,6 @@ interface CoinCandleChartProps {
 }
 
 export function CoinCandleChart({ coinId, height, width, onPriceChange }: CoinCandleChartProps) {
-  const insets = useSafeAreaInsets();
   const { data: chartData, isLoading, error } = useQuery({
     queryKey: ["chart", coinId, "candle"],
     queryFn: async () => {
@@ -43,7 +41,11 @@ export function CoinCandleChart({ coinId, height, width, onPriceChange }: CoinCa
   }, [chartData, onPriceChange]);
 
   if (isLoading) {
-    return <ActivityIndicator size="large" color="#2563EB" />;
+    return (
+      <View style={{ height, width }} className="items-center justify-center">
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
   }
 
   if (error) {
@@ -65,8 +67,7 @@ export function CoinCandleChart({ coinId, height, width, onPriceChange }: CoinCa
       </CandlestickChart.Provider>
 
       <View 
-        className="absolute right-4"
-        style={{ bottom: 16 + insets.bottom }}
+        className="absolute bottom-4 right-8"
       >
         <AlertControl coinId={coinId} currentPrice={currentPrice} />
       </View>

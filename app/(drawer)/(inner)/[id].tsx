@@ -10,8 +10,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function CryptoDetail() {
   const { id } = useLocalSearchParams();
-  const { top, bottom } = useSafeAreaInsets();
   const { height, width } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const { coins } = useCoinStore();
   const coin = coins.find(c => c.id === id);
   const { chartType } = useChartTypeStore();
@@ -30,11 +30,14 @@ export default function CryptoDetail() {
     );
   }
 
-  const chartHeight = height * 0.85;
+  // Calculate available height for chart
+  // height - header (approx 100) - bottom tab/padding
+  const chartHeight = height * 0.70;
+  const adjustedWidth = width - insets.left - insets.right;
 
   return (
-    <View className="flex-1 bg-white" style={{ paddingTop: top + 60, paddingBottom: bottom }}>
-      <View className="px-8 pb-8">
+    <View className="flex-1 bg-white">
+      <View className="px-8 pb-8 pt-4">
         <ChartHeader symbol={coin?.symbol}>
           <Text className="text-4xl font-bold text-gray-900">
             ${currentPrice.toLocaleString()}
@@ -42,19 +45,19 @@ export default function CryptoDetail() {
         </ChartHeader>
       </View>
 
-      <View className="absolute bottom-0 left-0 right-0 items-center">
+      <View className="flex-1 items-center justify-end pb-4">
         {chartType === 'line' ? (
           <CoinLineChart 
             coinId={id as string} 
             height={chartHeight} 
-            width={width}
+            width={adjustedWidth}
             onPriceChange={setCurrentPrice} 
           />
         ) : (
           <CoinCandleChart 
             coinId={id as string} 
             height={chartHeight} 
-            width={width}
+            width={adjustedWidth}
             onPriceChange={setCurrentPrice} 
           />
         )}

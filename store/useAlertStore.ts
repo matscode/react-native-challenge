@@ -7,6 +7,7 @@ export interface Alert {
   coinId: string;
   targetPrice: number;
   type: 'above' | 'below';
+  initialPrice?: number;
   status: 'active' | 'triggered';
   triggeredAt: string | null; // ISO Date
   createdAt: string; // ISO Date
@@ -15,7 +16,7 @@ export interface Alert {
 
 interface AlertStore {
   alerts: Alert[];
-  addAlert: (coinId: string, targetPrice: number, type: 'above' | 'below') => void;
+  addAlert: (coinId: string, targetPrice: number, type: 'above' | 'below', initialPrice?: number) => void;
   removeAlert: (id: string) => void;
   triggerAlert: (id: string) => void;
   markAsRead: (id: string) => void;
@@ -27,7 +28,7 @@ export const useAlertStore = create<AlertStore>()(
   persist(
     (set) => ({
       alerts: [],
-      addAlert: (coinId, targetPrice, type) =>
+      addAlert: (coinId, targetPrice, type, initialPrice) =>
         set((state) => ({
           alerts: [
             ...state.alerts,
@@ -36,6 +37,7 @@ export const useAlertStore = create<AlertStore>()(
               coinId,
               targetPrice,
               type,
+              initialPrice,
               status: 'active',
               triggeredAt: null,
               createdAt: new Date().toISOString(),

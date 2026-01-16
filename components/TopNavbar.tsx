@@ -2,12 +2,11 @@ import { useAlertStore } from "@/store/useAlertStore";
 import { useGlobalSearchParams, useRouter, useSegments } from "expo-router";
 import { Bell } from "phosphor-react-native";
 import { Pressable, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ChartTypeButton } from "./ChartTypeButton";
 import { MenuButton } from "./MenuButton";
 
 export function TopNavbar() {
-  const { top, left, right } = useSafeAreaInsets();
+  
   const { id } = useGlobalSearchParams();
   const segments = useSegments();
   const router = useRouter();
@@ -19,7 +18,6 @@ export function TopNavbar() {
 
   return (
     <View 
-      style={{ paddingTop: top, paddingLeft: left, paddingRight: right }} 
     >
 
     <View 
