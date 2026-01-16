@@ -33,7 +33,7 @@ The architecture separates concerns:
   - [x] Display Current Price
   - [x] Interactive Chart (wagmi-charts)
 - [x] **Alerts System**:
-  - [x] Set/Update Price Alerts
+  - [x] Set Price Alerts
   - [x] Trigger Logic
   - [x] Notification Icon & Badge
   - [x] Alerts History Screen (shows Entry Price)
@@ -74,15 +74,15 @@ The architecture separates concerns:
    - **`EXPO_PUBLIC_ENABLE_CHART_POLLING`** (Default: `true`)
      - Set to `true` to enable live chart updates (every 30s).
 
-3. Start the development server:
+4. Start the development server:
 
    ```bash
    npx expo start
    ```
 
-4. Run on Android/iOS simulator or device.
+5. Run on Android/iOS simulator or device.
 
-5. **Build APK for Android**:
+6. **Build APK for Android**:
 
    To generate an installable APK for testing or direct distribution:
 
@@ -92,8 +92,8 @@ The architecture separates concerns:
 
    *Note: This produces an APK instead of an AAB due to the updated configuration in `eas.json`.*
 
-6. **Download APK**:
-   
+7. **Download APK**:
+
    You can download the latest build here: [Download APK](https://expo.dev/artifacts/eas/eLz8JnKN5Rrgu4N2bHKrHS.apk)
 
 ## Trade-offs & Limitations
@@ -119,6 +119,15 @@ The architecture separates concerns:
   - *Rationale*: Improves usability with the keyboard, preventing the input from being covered.
 - **Height Constraint**: The modal has a maximum height of 80% of the screen.
   - *Trade-off*: While this prevents the modal from expanding off-screen with many alerts, it requires scrolling for long lists.
+
+## 🎓 Lessons Learned
+
+### NativeWind & Shadows
+
+One key learning was that **NativeWind does not fully support Tailwind's `shadow-*` utility classes** out of the box. This is because React Native's shadow implementation (specifically on Android vs iOS) differs significantly from web CSS box-shadows.
+
+- **Issue**: Applying classes like `shadow-md` or `shadow-lg` might not produce the expected visual result cross-platform.
+- **Resolution**: While NativeWind maps many utilities, shadows often require manual styling (using `elevation` for Android and `shadowOffset/Opacity/Radius` for iOS) or specific configuration to work reliably. This reinforces the understanding that while NativeWind brings Tailwind syntax to React Native, not all web CSS properties map 1:1 to the underlying native view primitives.
 
 ## ⚖️ Tradeoffs & Performance Opportunities
 
