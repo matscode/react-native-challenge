@@ -1,6 +1,10 @@
-# Crypto Chart Viewer + Price Alerts
+# Crypto Chart Viewer + Price Alerts: Coinscout
 
 > **Note**: For the original coding challenge instructions and requirements, please see [PROJECT_INSTRUCTIONS.md](./PROJECT_INSTRUCTIONS.md).
+
+## 📥 Download APK
+
+You can download the latest build here: [Download APK](https://expo.dev/artifacts/eas/eLz8JnKN5Rrgu4N2bHKrHS.apk) | [Mirror Link](https://drive.google.com/file/d/1PRNCySnK0qdg2hO6vIsy-2316cGkFRAC/view?usp=sharing)
 
 ## Overview
 
@@ -91,10 +95,6 @@ The architecture separates concerns:
    ```
 
    *Note: This produces an APK instead of an AAB due to the updated configuration in `eas.json`.*
-
-7. **Download APK**:
-
-   You can download the latest build here: [Download APK](https://expo.dev/artifacts/eas/eLz8JnKN5Rrgu4N2bHKrHS.apk) | [Mirror Link](https://drive.google.com/file/d/1PRNCySnK0qdg2hO6vIsy-2316cGkFRAC/view?usp=sharing)
 
 ## Trade-offs & Limitations
 
