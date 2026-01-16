@@ -69,6 +69,16 @@ The architecture separates concerns:
 
 4. Run on Android/iOS simulator or device.
 
+5. **Build APK for Android**:
+
+   To generate an installable APK for testing or direct distribution:
+
+   ```bash
+   eas build -p android --profile production
+   ```
+
+   *Note: This produces an APK instead of an AAB due to the updated configuration in `eas.json`.*
+
 ## Trade-offs & Limitations
 
 ### 1. No Alert Editing
