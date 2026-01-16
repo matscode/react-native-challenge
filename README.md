@@ -94,7 +94,7 @@ The architecture separates concerns:
 
 7. **Download APK**:
 
-   You can download the latest build here: [Download APK](https://expo.dev/artifacts/eas/eLz8JnKN5Rrgu4N2bHKrHS.apk)
+   You can download the latest build here: [Download APK](https://expo.dev/artifacts/eas/eLz8JnKN5Rrgu4N2bHKrHS.apk) | [Mirror Link](https://drive.google.com/file/d/1PRNCySnK0qdg2hO6vIsy-2316cGkFRAC/view?usp=sharing)
 
 ## Trade-offs & Limitations
 
@@ -124,10 +124,11 @@ The architecture separates concerns:
 
 ### NativeWind & Shadows
 
-One key learning was that **NativeWind does not fully support Tailwind's `shadow-*` utility classes** out of the box. This is because React Native's shadow implementation (specifically on Android vs iOS) differs significantly from web CSS box-shadows.
+**NativeWind's `shadow-*` classes don't map 1:1 to React Native** because native platforms handle shadows differently than web CSS.
 
-- **Issue**: Applying classes like `shadow-md` or `shadow-lg` might not produce the expected visual result cross-platform.
-- **Resolution**: While NativeWind maps many utilities, shadows often require manual styling (using `elevation` for Android and `shadowOffset/Opacity/Radius` for iOS) or specific configuration to work reliably. This reinforces the understanding that while NativeWind brings Tailwind syntax to React Native, not all web CSS properties map 1:1 to the underlying native view primitives.
+- **Issue**: React Native uses `elevation` (Android) and specific shadow properties (iOS), which don't perfectly align with Tailwind's `box-shadow` utilities.
+- **Impact**: In this project, attempting to use these classes caused unexpected errors like `"Couldn't find a navigation context"` during state changes (global or local).
+- **Lesson**: `shadow-*` utilities are web-centric and often fail on mobile. Use platform-native properties (e.g., `elevation` on Android) to ensure correct shadow rendering.
 
 ## ⚖️ Tradeoffs & Performance Opportunities
 
