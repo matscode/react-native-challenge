@@ -1,9 +1,10 @@
-import { useEffect } from "react";
-import { Slot } from "expo-router";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as SplashScreen from "expo-splash-screen";
+import { AlertManager } from "@/components/AlertManager";
 import { useCoinStore } from "@/store/useCoinStore";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Slot } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
+        <AlertManager />
         <Slot />
       </QueryClientProvider>
     </GestureHandlerRootView>

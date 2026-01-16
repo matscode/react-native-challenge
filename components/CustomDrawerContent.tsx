@@ -1,5 +1,5 @@
 import { useCoinStore } from "@/store/useCoinStore";
-import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { usePathname, useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -46,19 +46,27 @@ export function CustomDrawerContent(props: any) {
         <View className="py-6">
           <DrawerSectionTitle title="Alerts" />
           <View className="px-4">
-            <DrawerItem
-              label="Manage Alerts"
+            <Pressable
+              onPress={() => router.push("/(drawer)/(inner)/notifications")}
+              className={`flex-row items-center py-2 rounded-full px-4 ${
+                pathname.includes("notifications") ? "bg-blue-100" : "transparent"
+              }`}
+            >
+              <Text className={`text-base ${pathname.includes("notifications") ? "text-blue-600 font-semibold" : "text-gray-700 font-normal"}`}>
+                Notification
+              </Text>
+            </Pressable>
+            
+            <Pressable
               onPress={() => router.push("/(drawer)/(inner)/alerts")}
-              focused={isAlertsActive}
-              activeTintColor="#2563EB"
-              activeBackgroundColor="#DBEAFE"
-              labelStyle={{ 
-                marginLeft: -16, 
-                fontSize: 16, 
-                color: isAlertsActive ? '#2563EB' : '#374151',
-                fontWeight: isAlertsActive ? '600' : '400'
-              }}
-            />
+              className={`flex-row items-center py-2 rounded-full px-4  ${
+                pathname.includes("alerts") ? "bg-blue-100" : "transparent"
+              }`}
+            >
+              <Text className={`text-base ${pathname.includes("alerts") ? "text-blue-600 font-semibold" : "text-gray-700 font-normal"}`}>
+                Manage
+              </Text>
+            </Pressable>
           </View>
         </View>
       </DrawerContentScrollView>

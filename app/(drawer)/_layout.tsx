@@ -1,5 +1,5 @@
-import { Drawer } from "expo-router/drawer";
 import { CustomDrawerContent } from "@/components/CustomDrawerContent";
+import { Drawer } from "expo-router/drawer";
 
 export default function DrawerLayout() {
   return (
@@ -8,6 +8,7 @@ export default function DrawerLayout() {
       screenOptions={{
         headerShown: false,
         drawerPosition: "right",
+        swipeEnabled: false,
       }}
     >
       <Drawer.Screen

@@ -17,17 +17,17 @@ Build a **Crypto Chart Viewer app** using **React Native with Expo** that:
 ## 📝 Implementation Checklist
 
 - [x] **Project Setup**: Clean up, install packages (Zustand, Wagmi Charts, NativeWind, TanStack Query, Phosphor), configure NativeWind
-- [ ] **Navigation**: Setup Drawer Navigation with 10 cryptos
-- [ ] **Data Fetching**: Fetch crypto data (CoinGecko)
-- [ ] **Detail Screen**:
-  - [ ] Display Current Price
-  - [ ] Interactive Chart (wagmi-charts)
-- [ ] **Alerts System**:
-  - [ ] Set/Update Price Alerts
-  - [ ] Trigger Logic
-  - [ ] Notification Icon & Badge
-  - [ ] Alerts History Screen
-- [ ] **Styling**: Polish UI with NativeWind
+- [x] **Navigation**: Setup Drawer Navigation with 10 cryptos
+- [x] **Data Fetching**: Fetch crypto data (CoinGecko)
+- [x] **Detail Screen**:
+  - [x] Display Current Price
+  - [x] Interactive Chart (wagmi-charts)
+- [x] **Alerts System**:
+  - [x] Set/Update Price Alerts
+  - [x] Trigger Logic
+  - [x] Notification Icon & Badge
+  - [x] Alerts History Screen
+- [x] **Styling**: Polish UI with NativeWind
 
 ---
 
@@ -98,3 +98,20 @@ Build a **Crypto Chart Viewer app** using **React Native with Expo** that:
   - Any limitations, trade-offs, or assumptions made
 - Fork this REPO and push your code
 - Create an apk build and share a link to download it in the README.
+
+---
+
+## ⚖️ Tradeoffs & Performance Opportunities
+
+### Tradeoffs
+*   **Polling vs. WebSockets**: We use polling (every 30s) for simplicity and API cost management (CoinGecko free tier).
+    *   *Pro*: Easy to implement, predictable API usage.
+    *   *Con*: Data is not truly real-time (up to 30s latency). WebSockets would be better for a "pro" trading experience but require a paid plan or a different provider.
+*   **No Caching**: We disabled `tanstack-query` caching (`gcTime: 0`) for charts.
+    *   *Pro*: Always shows the latest data.
+    *   *Con*: Higher bandwidth usage and potential "flicker" or loading state on every navigation or rotation.
+
+### Performance Opportunities
+*   **Optimized Polling**: Instead of two separate polls (one for alert checks, one for chart data), we could consolidate them into a single global store action that fetches price data once and distributes it. currently, we might be double-fetching for the same coin if the user is viewing its chart.
+*   **Background Fetch**: For alerts, we rely on the app being open. Using `expo-background-fetch` or native modules would allow price monitoring even when the app is backgrounded or killed (crucial for a real production app).
+*   **Render Optimization**: The `AlertModal` re-renders entirely when typing the price. Separating the form state into a smaller sub-component would reduce render work.

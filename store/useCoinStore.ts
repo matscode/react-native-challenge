@@ -1,5 +1,5 @@
-import { create } from 'zustand';
 import { Coin } from '@/types';
+import { create } from 'zustand';
 
 interface CoinStore {
   coins: Coin[];

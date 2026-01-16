@@ -3,7 +3,7 @@
     "name": "Coinscout",
     "slug": "coinscout",
     "version": "1.0.0",
-    "orientation": "landscape",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "coinscout",
     "userInterfaceStyle": "automatic",
@@ -45,7 +45,7 @@
     ],
     "experiments": {
       "typedRoutes": true,
-      "reactCompiler": true
+      "reactCompiler": false
     }
   }
 }
