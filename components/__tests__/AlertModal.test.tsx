@@ -1,5 +1,5 @@
 import { useAlertStore } from '@/store/useAlertStore';
-import { fireEvent, render } from '@testing-library/react-native';
+import { render, userEvent } from '@testing-library/react-native';
 import { AlertModal } from '../AlertModal';
 
 // Mock store
@@ -36,25 +36,27 @@ describe('AlertModal', () => {
     expect(getByPlaceholderText('Target Price ($)')).toBeTruthy();
   });
 
-  it('adds alert when valid price is entered', () => {
+  it('adds alert when valid price is entered', async () => {
     const onClose = jest.fn();
     const { getByText, getByPlaceholderText } = render(
       <AlertModal visible={true} onClose={onClose} coinId="bitcoin" currentPrice={50000} />
     );
 
-    fireEvent.changeText(getByPlaceholderText('Target Price ($)'), '60000');
-    fireEvent.press(getByText('Add Alert'));
+    const user = userEvent.setup();
+    await user.type(getByPlaceholderText('Target Price ($)'), '60000');
+    await user.press(getByText('Add Alert'));
 
     expect(mockAddAlert).toHaveBeenCalledWith('bitcoin', 60000, 'above', 50000);
   });
 
-  it('shows error for invalid price', () => {
+  it('shows error for invalid price', async () => {
     const onClose = jest.fn();
     const { getByText, getByPlaceholderText } = render(
       <AlertModal visible={true} onClose={onClose} coinId="bitcoin" currentPrice={50000} />
     );
 
-    fireEvent.changeText(getByPlaceholderText('Target Price ($)'), '-100');
+    const user = userEvent.setup();
+    await user.type(getByPlaceholderText('Target Price ($)'), '-100');
     
     expect(getByText('Price must be positive')).toBeTruthy();
   });
