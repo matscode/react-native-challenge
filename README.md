@@ -57,7 +57,15 @@ The architecture separates concerns:
    npm install
    ```
 
-2. **Configure Environment** (Optional):
+2. **Run Unit Tests**:
+
+   To verify the logic and components:
+
+   ```bash
+   npm test
+   ```
+
+3. **Configure Environment** (Optional):
 
    - **`EXPO_PUBLIC_ENABLE_FUTURE_CROSSING_ALERTS`** (Default: `true`)
      - Controls alert logic. If `true`, alerts only trigger when price *crosses* the target. If `false` (for testing), triggers immediately if condition met.
@@ -141,4 +149,5 @@ The architecture separates concerns:
   - **Onboarding Flow**: A journey map or tutorial to introduce features to new users.
 - **Testing**:
   - **Robust Strategy**: Implement a consistent `testID` naming convention (e.g., `ScreenName.ComponentName.Element`) to avoid conflicts and improve test maintainability.
+  - **Expanded Coverage**: Add tests for `AlertManager` (polling logic), `useAlertStore`, and Chart components.
   - **E2E Tests**: Add Maestro or Detox for end-to-end user flow validation.
