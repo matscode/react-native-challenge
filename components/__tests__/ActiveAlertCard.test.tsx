@@ -1,6 +1,6 @@
-import { render, fireEvent } from '@testing-library/react-native';
-import { ActiveAlertCard } from '../ActiveAlertCard';
 import { Alert } from '@/store/useAlertStore';
+import { render, userEvent } from '@testing-library/react-native';
+import { ActiveAlertCard } from '../ActiveAlertCard';
 
 const mockAlert: Alert = {
   id: '1',
@@ -23,11 +23,12 @@ describe('ActiveAlertCard', () => {
     expect(getByText('Entry: $45,000')).toBeTruthy();
   });
 
-  it('calls onRemove when delete button is pressed', () => {
+  it('calls onRemove when delete button is pressed', async () => {
     const onRemove = jest.fn();
     const { getByTestId } = render(<ActiveAlertCard alert={mockAlert} onRemove={onRemove} />);
     
-    fireEvent.press(getByTestId('remove-alert-button'));
+    const user = userEvent.setup();
+    await user.press(getByTestId('remove-alert-button'));
     expect(onRemove).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { render, userEvent, waitFor } from '@testing-library/react-native';
 import * as Notifications from 'expo-notifications';
 import { Alert } from 'react-native';
 import { AlertControl } from '../AlertControl';
@@ -27,7 +27,8 @@ describe('AlertControl', () => {
     
     const { getByTestId, findByTestId } = render(<AlertControl coinId="bitcoin" currentPrice={50000} />);
     
-    fireEvent.press(getByTestId('alert-trigger-button'));
+    const user = userEvent.setup();
+    await user.press(getByTestId('alert-trigger-button'));
     
     expect(await findByTestId('alert-modal')).toBeTruthy();
   });
@@ -38,7 +39,8 @@ describe('AlertControl', () => {
     
     const { getByTestId } = render(<AlertControl coinId="bitcoin" currentPrice={50000} />);
     
-    fireEvent.press(getByTestId('alert-trigger-button'));
+    const user = userEvent.setup();
+    await user.press(getByTestId('alert-trigger-button'));
     
     await waitFor(() => {
       expect(alertSpy).toHaveBeenCalled();

@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, userEvent } from '@testing-library/react-native';
 import { AlertDirectionSelector } from '../AlertDirectionSelector';
 
 describe('AlertDirectionSelector', () => {
@@ -11,14 +11,15 @@ describe('AlertDirectionSelector', () => {
     expect(getByTestId('direction-below')).toBeTruthy();
   });
 
-  it('calls onChange when options are selected', () => {
+  it('calls onChange when options are selected', async () => {
     const onChange = jest.fn();
     const { getByTestId } = render(<AlertDirectionSelector value="above" onChange={onChange} />);
     
-    fireEvent.press(getByTestId('direction-below'));
+    const user = userEvent.setup();
+    await user.press(getByTestId('direction-below'));
     expect(onChange).toHaveBeenCalledWith('below');
 
-    fireEvent.press(getByTestId('direction-above'));
+    await user.press(getByTestId('direction-above'));
     expect(onChange).toHaveBeenCalledWith('above');
   });
 });
