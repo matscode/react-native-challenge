@@ -34,7 +34,7 @@ export function ActiveAlertCard({ alert, onRemove }: ActiveAlertCardProps) {
       </View>
       
       {onRemove && (
-        <Pressable onPress={onRemove} className="p-2">
+        <Pressable onPress={onRemove} className="p-2" testID="remove-alert-button">
           <Trash size={20} color="#9CA3AF" />
         </Pressable>
       )}

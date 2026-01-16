@@ -38,6 +38,11 @@ The architecture separates concerns:
   - [x] Notification Icon & Badge
   - [x] Alerts History Screen (shows Entry Price)
 - [x] **Styling**: Polish UI with NativeWind
+- [x] **Unit Tests**:
+  - [x] AlertModal
+  - [x] AlertControl
+  - [x] ActiveAlertCard
+  - [x] AlertDirectionSelector
 - [x] **Bonus Features**:
   - [x] Animations on the chart render
   - [x] Persist alert state across app restarts
@@ -78,6 +83,10 @@ The architecture separates concerns:
    ```
 
    *Note: This produces an APK instead of an AAB due to the updated configuration in `eas.json`.*
+
+6. **Download APK**:
+   
+   You can download the latest build here: [Download APK](https://expo.dev/artifacts/eas/eLz8JnKN5Rrgu4N2bHKrHS.apk)
 
 ## Trade-offs & Limitations
 
