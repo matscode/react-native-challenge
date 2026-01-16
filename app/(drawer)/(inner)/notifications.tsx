@@ -2,25 +2,22 @@ import { useAlertStore } from "@/store/useAlertStore";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 export default function NotificationsScreen() {
-  const { alerts, markAllAsRead } = useAlertStore();
+  const { alerts, clearTriggeredAlerts } = useAlertStore();
 
   const triggeredAlerts = alerts
     .filter(a => a.status === 'triggered')
     .sort((a, b) => new Date(b.triggeredAt!).getTime() - new Date(a.triggeredAt!).getTime());
-
-  const unreadTriggeredAlerts = triggeredAlerts.filter((a) => !a.readAt);
-  const hasUnread = Boolean(unreadTriggeredAlerts.length);
 
   return (
     <View className="flex-1 bg-white">
       <ScrollView className="flex-1 px-6">
         <View className="flex-row items-center justify-between mb-6">
           <Text className="text-3xl font-bold text-gray-900">
-            Notifications {hasUnread && `(${unreadTriggeredAlerts.length})`}
+            Notifications {triggeredAlerts.length > 0 && `(${triggeredAlerts.length})`}
           </Text>
-          {hasUnread && (
-            <Pressable onPress={markAllAsRead}>
-              <Text className="text-blue-600 font-medium">Mark all Read</Text>
+          {triggeredAlerts.length > 0 && (
+            <Pressable onPress={clearTriggeredAlerts}>
+              <Text className="text-blue-600 font-medium">Clear Log</Text>
             </Pressable>
           )}
         </View>
@@ -33,23 +30,23 @@ export default function NotificationsScreen() {
           triggeredAlerts.map((alert) => (
             <View
               key={alert.id}
-              className={`p-4 rounded-xl mb-3 border ${!alert.readAt ? "bg-red-50 border-red-100" : "bg-gray-50 border-gray-100"}`}
+              className="p-4 rounded-xl mb-3 border bg-gray-50 border-gray-100"
             >
               <View className="flex-row justify-between items-start">
                 <View>
                   <Text
-                    className={`font-bold text-lg uppercase ${!alert.readAt ? "text-red-900" : "text-gray-700"}`}
+                    className="font-bold text-lg uppercase text-gray-700"
                   >
                     {alert.coinId}
                   </Text>
                   <Text
-                    className={`${!alert.readAt ? "text-red-700" : "text-gray-600"}`}
+                    className="text-gray-600"
                   >
                     Price hit ${alert.targetPrice.toLocaleString()} (
                     {alert.type})
                   </Text>
                   {alert.initialPrice !== undefined && (
-                    <Text className={`${!alert.readAt ? "text-red-700" : "text-gray-600"}`}>
+                    <Text className="text-gray-600">
                       Entry Price: ${alert.initialPrice.toLocaleString()}
                     </Text>
                   )}

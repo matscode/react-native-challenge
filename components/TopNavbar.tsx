@@ -13,7 +13,7 @@ export function TopNavbar() {
   const title = typeof id === 'string' ? id : 'Coinscout';
   const { alerts } = useAlertStore();
 
-  const triggeredCount = alerts.filter(a => a.status === 'triggered' && !a.readAt).length;
+  const triggeredCount = alerts.filter(a => a.status === 'triggered').length;
   const showChartToggle = segments[segments.length - 1] === '[id]';
 
   return (
